@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+	xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+	xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+	xmlns:flowable="http://flowable.org/bpmn"
+	typeLanguage="http://www.w3.org/2001/XMLSchema"
+	expressionLanguage="http://www.w3.org/1999/XPath"
+	targetNamespace="http://www.flowable.org/processdef">
+   
+	<process id="treatRequestReview"
+      name="A simple process to request treat." isExecutable="true">
+    	<startEvent id="start" />
+    	<sequenceFlow sourceRef="start" targetRef="reviewTreatRequest" />
+    	<userTask id="reviewTreatRequest" name="Review the request for treat"
+          flowable:candidateGroups="parents" />
+        <sequenceFlow sourceRef="reviewTreatRequest" targetRef="decision" />
+        <exclusiveGateway id="decision" />
+        <sequenceFlow sourceRef="decision" targetRef="treatApproved">
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${approved}]]>
+            </conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="decision" targetRef="treatRejected">
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${!approved}]]>
+            </conditionExpression>
+        </sequenceFlow>
+        <serviceTask id="treatApproved" name="Offer money to buy treat."
+          flowable:class="com.allstate.service.TreatService" />
+        <sequenceFlow sourceRef="treatApproved" targetRef="end" />
+        <serviceTask id="treatRejected" name="Instruct to complete a chore."
+          flowable:class="com.allstate.service.ChoreService" />
+        <sequenceFlow sourceRef="treatRejected" targetRef="end" />
+        <endEvent id="end" />
+    </process>
+</definitions>
