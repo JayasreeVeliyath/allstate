@@ -7,20 +7,19 @@ package com.allstate;
  * @author jayasreeveliyath
  *
  */
-public class LambdaExpressionExample implements FunctionalInterfaceExample{
+public class LambdaExpressionExample {
+	
+	public static void main(String args[])
+    {
+		FunctionalInterface functionalInterface = (String name)->System.out.println("Hello, "+name);
+  
+		functionalInterface.printName("John Doe");
+    }
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void say(String msg) {
-		// TODO Auto-generated method stub
-		
+	
+	interface FunctionalInterface
+	{
+	    void printName(String name);
 	}
 
 }
